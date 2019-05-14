@@ -1,0 +1,9 @@
+$menu-width: 256px;
+
+.menu {
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  width: $menu-width;
+}
