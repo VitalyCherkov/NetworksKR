@@ -3,29 +3,29 @@ import { Alert, Icon, Input, Layout, Menu } from 'antd';
 import * as PropTypes from 'prop-types';
 import CSS from 'react-css-modules';
 import { MessageType, UserType } from 'config/types';
-import styles from './ChatPage.modules.scss';
+import Header from './Header/Header';
 import {
   contentStyles,
   mainLayoutStyles,
   menuSiderStyles,
   menuStyles,
   inputContainerStyles,
-  inputStyles, messagesStyles, messageStyles,
+  inputStyles,
+  messagesStyles,
+  messageStyles,
 } from './styles';
-import Header from './Header/Header';
+import styles from './ChatPage.modules.scss';
 
 const GROUP_CHAT_KEY = 'group_chat_key';
 
 @CSS(styles)
 export default class ChatPage extends React.Component {
   static propTypes = {
-    isAdmin: PropTypes.bool,
-
     messages: PropTypes.arrayOf(MessageType).isRequired,
     users: PropTypes.arrayOf(UserType).isRequired,
-    me: UserType.isRequired,
+    me: PropTypes.string.isRequired,
 
-    onSettingsClick: PropTypes.func.isRequired,
+    onExit: PropTypes.func.isRequired,
     onSendMessage: PropTypes.func.isRequired,
   };
 
@@ -64,8 +64,9 @@ export default class ChatPage extends React.Component {
     const key = this.currentKey;
     const { messages } = this.props;
     console.log(messages, key);
+    console.log('>>> FILTER MESSAGES', messages, key, this.props, this.state);
     return messages.filter(({ author, toCOM }) =>
-      key === GROUP_CHAT_KEY ? !toCOM : (`${author.port}` === key || `${toCOM}` === key)
+      key === GROUP_CHAT_KEY ? !toCOM : toCOM && (`${author.port}` === key || `${toCOM}` === key)
     );
   }
 
@@ -92,7 +93,7 @@ export default class ChatPage extends React.Component {
   };
 
   render() {
-    const { users, isAdmin, onSettingsClick, me } = this.props;
+    const { users, onExit, me } = this.props;
     const { currentUser } = this.state;
 
     return (
@@ -116,17 +117,16 @@ export default class ChatPage extends React.Component {
         <Layout {...mainLayoutStyles}>
           <Layout.Content  {...contentStyles}>
             <Header
-              isAdmin={isAdmin}
               currentUser={currentUser}
-              onSettingsClick={onSettingsClick}
+              onExit={onExit}
               me={me}
             />
             <div {...messagesStyles}>
-              { this.messages.map(({ author: { nickname, port }, text }, i) => (
+              { this.messages.map(({ author: { nickname }, text }, i) => (
                 <Alert
                   message={nickname}
                   description={text}
-                  type={port === me.port ? 'success' : 'info'}
+                  type={me === nickname ? 'success' : 'info'}
                   key={i}
                   {...messageStyles}
                 />

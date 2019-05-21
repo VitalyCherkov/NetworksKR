@@ -30,7 +30,7 @@ if (isProd) {
 module.exports = {
   context: __dirname,
   entry: path.join(srcPath, 'index.jsx'),
-  // devtool: 'source-map',
+  devtool: 'source-map',
   output: {
     path: path.resolve('./public/static'),
     filename: 'js/[name]-[hash].js',
@@ -143,7 +143,8 @@ module.exports = {
       config: `${srcPath}/config`,
       components: `${srcPath}/components`,
       styles: `${srcPath}/styles`,
-      utils: `${srcPath}/utils`
+      utils: `${srcPath}/utils`,
+      store: `${srcPath}/store`,
     }
   },
   devServer: {

@@ -1,7 +1,7 @@
 import * as PropTypes from 'prop-types';
 
 export const UserType = PropTypes.shape({
-  port: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  port: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   nickname: PropTypes.string.isRequired,
 });
 

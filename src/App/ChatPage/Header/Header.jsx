@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { Button, Col, Layout, Row, Tag, Typography } from 'antd';
+import { Button, Col, Layout, Row, Tooltip, Typography } from 'antd';
 import { UserType } from 'config/types';
 import { headerStyles, meStyles, rowStyles } from './styles';
 
@@ -8,9 +8,8 @@ const { Text } = Typography;
 
 export default class Header extends React.Component {
   static propTypes = {
-    isAdmin: PropTypes.bool.isRequired,
-    onSettingsClick: PropTypes.func.isRequired,
-    me: UserType.isRequired,
+    onExit: PropTypes.func.isRequired,
+    me: PropTypes.string.isRequired,
     currentUser: UserType,
   };
 
@@ -19,7 +18,7 @@ export default class Header extends React.Component {
   };
 
   render() {
-    const { isAdmin, me, currentUser, onSettingsClick } = this.props;
+    const { me, currentUser, onExit } = this.props;
     return (
       <Layout.Header {...headerStyles}>
         <Row {...rowStyles}>
@@ -29,18 +28,17 @@ export default class Header extends React.Component {
             </Text>
           </Col>
           <Col span={6}>
-            <Text {...meStyles}>{ me.nickname }</Text>
-            { isAdmin && (
-              <Tag color="magenta">Админ</Tag>
-            )}
+            <Text {...meStyles}>{ me }</Text>
           </Col>
           <Col span={2}>
-            <Button
-              shape="circle"
-              icon="setting"
-              size="small"
-              onClick={onSettingsClick}
-            />
+            <Tooltip placement="leftBottom" title="Разорвать логическое соединение">
+              <Button
+                shape="circle"
+                icon="logout"
+                size="small"
+                onClick={onExit}
+              />
+            </Tooltip>
           </Col>
         </Row>
       </Layout.Header>
